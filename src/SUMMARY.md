@@ -35,13 +35,11 @@
   - [Deduplicating stamps](devs/deduplicating-stamps.md)
 
 # Reference documentation
-
 - [Scoring API](devs/scoring-api.md)
 - [Gitcoin repositories](devs/gitcoin-project-list.md)
 
 # Additional Information
-- [Developer FAQs](additional/dev-faqs.md)
-- [User FAQs](additional/user-faqs.md)
+- [Developer FAQs](additional/faqs.md)
 - [Get involved](additional.contributing.md)
 
 # Case Studies

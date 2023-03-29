@@ -23,7 +23,7 @@ no-section-label = false
 # git-repository-url = "https://github.com/rust-lang/mdBook"
 git-repository-icon = "fa-github"
 edit-url-template = "https://github.com/rust-lang/mdBook/edit/master/guide/{path}"
-site-url = "/pasport-docs/"
+site-url = "/passport-docs/"
 cname = "myproject.rs"
 input-404 = "404.md"
 
