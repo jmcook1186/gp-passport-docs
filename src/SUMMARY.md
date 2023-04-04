@@ -42,7 +42,7 @@
 
 # Additional Information
 - [Developer FAQs](additional/faqs.md)
-- [Get involved](additional.contributing.md)
+- [Get involved](additional/contributing.md)
 
 # Case Studies
 - [Bankless](case-studies/bankless.md)
