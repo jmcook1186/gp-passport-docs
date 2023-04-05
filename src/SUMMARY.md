@@ -41,7 +41,7 @@
 - [Gitcoin repositories](devs/gitcoin-project-list.md)
 
 # Additional Information
-- [Developer FAQs](additional/faqs.md)
+- [FAQs](additional/faqs.md)
 - [Get involved](additional/contributing.md)
 
 # Case Studies

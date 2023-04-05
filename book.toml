@@ -12,12 +12,13 @@ use-default-preprocessors = true  # use the default preprocessors
 extra-watch-dirs = []             # directories to watch for triggering builds
 
 [output.html]
+
 default-theme = "ayu"
 preferred-dark-theme = "navy"
 curly-quotes = true
 mathjax-support = false
-copy-fonts = true
-# additional-css = ["custom.css", "custom2.css"]
+copy-fonts = false
+additional-css = ["theme/css/custom.css"]
 # additional-js = ["custom.js"]
 no-section-label = false
 # git-repository-url = "https://github.com/rust-lang/mdBook"
@@ -29,4 +30,3 @@ input-404 = "404.md"
 
 [output.html.search]
 limit-results = 15
-

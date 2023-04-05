@@ -111,7 +111,7 @@
   ```sh
   {
     "address": "string",
-    "community": "string",
+    "scorer_id": "string",
     "signature": "",
     "nonce": ""
   }
@@ -325,7 +325,7 @@
 
 <details>
   <summary>responses</summary>
-  
+  <details>
   <summary>200 OK</summary>
 
    response type is `application/json`
