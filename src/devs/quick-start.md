@@ -293,13 +293,13 @@ The next section of the code after the `todo` comments is the `return` statement
 
 ### Connecting the user's wallet
 
-The next thing we'll add is a function for connecting the user's wallet.
+The next thing we'll add is a function for connecting the user's wallet when they click the `connect` button.
 
 In this step we'll do the following:
 
-- When the user clicks the connect button and connects their wallet, we'll set their address in the local state, set connected to true, and then call the Gitcoin Passport API to check their score.
+- When the user clicks the connect button and connects their wallet, their `address` will be set in the local state, `connected` will be set to true, and then the Gitcoin Passport API will be called to check their score.
 
-Add the following code below the useState hooks:
+Open `app/page.tsx` and find the `todo` comment `/* todo check user's connection when the app loads */`. Replace this comment with the following code:
 
 ```tsx
 async function connect() {
@@ -314,15 +314,48 @@ async function connect() {
 }
 ```
 
-## Checking the usr's passport score
+This function connects the user's wallet to your app. It detects the address of the user's wallet and adds it to the `address` variable using the `setState` method. It updates `setConnected` to `true` and then passes the `address` to another function that checks the Passport score. This `checkPassport` function has not been written yet, so we'll add it int he next step.
 
-In this step, we'll be doing the following:
+
+### Checking the user's connection when the app loads
+
+The UI includes a button that allows the user to trigger the app to connect their wallet by clicking, but if they've already connected some time in the past then we can bypass that step and simply automatically connect, improving the user experience.
+
+To do this, add the following `useEffect` hook to your code in place of the `/* todo check user's connection when the app loads */` comment:
+
+```tsx
+useEffect(() => {
+  checkConnection()
+  async function checkConnection() {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      const accounts = await provider.listAccounts()
+      // if the user is connected, set their account and fetch their score
+      if (accounts && accounts[0]) {
+        setConnected(true)
+        setAddress(accounts[0].address)
+        checkPassport(accounts[0].address)
+      }
+    } catch (err) {
+      console.log('not connected...')
+    }
+  }
+}, [])
+```
+
+For more information on the `useEffect` hook, see the [React documentation](https://react.dev/reference/react/useEffect#useeffect).
+
+### Checking the user's passport score
+
+This function checks the user's Passport score. This requires that the user has already submitted their passport for scoring. If they have not, they need to do that first. You'll add the necessary function that allows them to submit their passport in the next step.
+
+In this step, you'll do the following:
 
 - Create a function to call the Gitcoin scorer API to get the user's score, passing in the Scorer ID and the user's address as request parameters.
 - If the user has a score, we set it in the local state.
 - If the user does not yet have a score, we set a message to be displayed to them asking them to create stamps and submit their passport.
 
-Add the following code below the `useState` hooks:
+Find the `todo` comment `/* todo check user's passport */` in `app/pages.tsx`. Replace the comment with the following code:
 
 ```tsx
 async function checkPassport(currentAddress = address) {
@@ -350,46 +383,30 @@ async function checkPassport(currentAddress = address) {
 }
 ```
 
-## Checking the user's connection when the app loads
+This function takes the user address as an argument. It then creates an API request by adding the address and the scorer ID that was loaded from your `.env.local` file to the Scorer API's `registry/scorer` endpoint. It then makes the request and assigns the result to the `passportData` variable. This `passportData` has several fields including `score`. The function extracts the value in the `score` field, rounds it to the nearest integer and stores it in the local state variable `score` using the `setScore` method. The function throws an exception if the score is missing, directing the user to add soem stamps to the passport before tryign again.
 
-We've created a button to allow the user to click a button to connect, but if they've already connected in the past then we can detect the connection and bypass that step making the user experience better.
 
-To do this, add the following useEffect hook to your code below the `useState` hooks:
+### Submitting the user's Passport
 
-```tsx
-useEffect(() => {
-  checkConnection()
-  async function checkConnection() {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum)
-      const accounts = await provider.listAccounts()
-      // if the user is connected, set their account and fetch their score
-      if (accounts && accounts[0]) {
-        setConnected(true)
-        setAddress(accounts[0].address)
-        checkPassport(accounts[0].address)
-      }
-    } catch (err) {
-      console.log('not connected...')
-    }
-  }
-}, [])
+The last piece of functionality to implement will be allowing a user to submit their passport for scoring.
+
+In this step, you'll do the following:
+
+- Create an API call to get the signing message from the Gitcoin Passport API
+- Prompt the user with the signing message to sign a transaction
+- Once the transaction is signed, send the signed message along with other arguments in a separate API call to submit their passport
+
+The following parameters are required in the API call to submit the passport:
+
+```
+- Wallet address
+- Scorer ID
+- Signature
+- Nonce
 ```
 
-## Submitting their passport
-The last piece of functionality we need to implement will be to allow a user to submit their passport for scoring.
+Add the following 2 functions to `app/page.tsx` after the `checkPassport` function, replacing the `/* todo get signing message from API */` and ` /* todo submit passport for scoring */` comments:
 
-In this step, we'll be doing the following:
-- Creating an API call to get the signing message from the Gitcoin Passport API
-- We can then prompt the user with the signing message to sign a transaction
-- Once the transaction is signed, we can send the signed message along with other parameters in a separate API call to submit their passport
-- When submitting the passport, we include the following parameters
-    - Wallet address
-    - Scorer ID
-    - Signature
-    - Nonce
-  
-Add the following 2 functions after the checkPassport function:
 
 ```tsx
   async function getSigningMessage() {
@@ -433,6 +450,9 @@ Add the following 2 functions after the checkPassport function:
     }
   }
 ```
+
+The first function, `getSigningMessage` calls the `signing-message` API endpoint. The response contains the `nonce` and `message` data required for signing. This function is called inside the second funtion, `submitPassport`. The message is passed to the user's wallet to be signed. Once signed, it is added to the body of a POST request to the `submit-passport` API endpoint along with the `signature`, `scorer_id` and `nonce`.
+
 
 ## Styling
 
