@@ -13,6 +13,10 @@ Sketch basic principle for docs styling. Granular style guide to follow.
 - generally aim to conform to modular documentation specs, as defined by [RedHat](https://redhat-documentation.github.io/modular-docs/)
 
 
+Link styling:
+- inline links OK, but limit frequency to < 5 per paragraph
+- link text should be descriptive - i.e. "more information in the [React documentation](link)" rather than "more information [here](link)"
+
 ## Assemblies and modules
 
 Modular documentation is organized as follows:
