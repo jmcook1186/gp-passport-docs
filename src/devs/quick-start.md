@@ -1,8 +1,8 @@
 # Developer quick-start guide
 
-In this guide, you'll learn how to gate an application using Gitcoin passport.
+In this guide, you'll learn how to gate an application using Gitcoin passport. 
 
-You'll be using Next.js and the Gitcoin Passport API to do this. The API enables everything you need to easily build sybil resistance into your web or mobile application.
+You'll be using [Next.js](https://nextjs.org/) and the [Gitcoin Passport Scorer API](https://api.scorer.gitcoin.co/docs#/) to do this. The API enables everything you need to easily build sybil resistance into your web or mobile application.
 
 To follow this tutorial, you'll first need to visit [https://scorer.gitcoin.co/](https://scorer.gitcoin.co/). Here, you'll create both an API key and a Scorer.
 
@@ -63,7 +63,7 @@ Now that you have a `Scorer` and an API Key, you can move on to building your ap
 - If the user does not yet have their passport configured, we'll ask them to configure and submit it.
 
 This simple example demonstrates the principles you would use to gate a real application using Gitcoin passport.
-The app will be built using Next.js and will make use of several of the Scorer API methods.
+The app will be built using [Next.js](https://nextjs.org/) and will make use of several of the Scorer API methods.
 
 
 ### API endpoints
@@ -122,7 +122,7 @@ const response = await fetch(SUBMIT_PASSPORT_URI, {
 
 ## Building the app
 
-**Note** that the full code for this project is in the codebase located [here](https://github.com/dabit3/nextjs-gitcoin-passport). You can refer to this repository any time if you need some extra context as you go through the instructions below.
+**Note** that the full code for this project is in [this codebase](https://github.com/dabit3/nextjs-gitcoin-passport). You can refer to this repository any time if you need some extra context as you go through the instructions below.
 
 The first thing to do is create a new [Next.js](https://nextjs.org/) application using the command 
 
@@ -165,7 +165,7 @@ In this step, you'll do the following:
 
 Start by opening `app/page.tsx` and removing all of the existing code. Then add the following code to `app/page.tsx` and save the file:
 
-```tsx
+```js
 // import the necessary packages
 'use client'
 import { useState, useEffect } from 'react'
@@ -213,7 +213,7 @@ In this step, you'll do the following:
 
 Start by, adding the following code immediately below the existing code in `app/page.tsx`:
 
-```tsx
+```js
 export default function Passport() {
   // here we deal with any local state we need to manage
   const [address, setAddress] = useState<string>('')
@@ -282,7 +282,7 @@ export default function Passport() {
 
 Note that only a portion of the intended functions are implemented in this code snippet - there are `todo` statements in the code as placeholders showing where more functions should be added later. The first section of the code is for defining local state variables. This means setting up some values that will exist throughout the lifecycle of the application, rather than being specific to individual functions. For more background on state management, see the [React documentation](https://react.dev/learn/state-a-components-memory). 
 
-```tsx
+```js
   const [address, setAddress] = useState<string>('')
   const [connected, setConnected] = useState<boolean>(false)
   const [score, setScore] = useState<string>('')
@@ -301,7 +301,7 @@ In this step we'll do the following:
 
 Open `app/page.tsx` and find the `todo` comment `/* todo check user's connection when the app loads */`. Replace this comment with the following code:
 
-```tsx
+```js
 async function connect() {
   try {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
@@ -323,7 +323,7 @@ The UI includes a button that allows the user to trigger the app to connect thei
 
 To do this, add the following `useEffect` hook to your code in place of the `/* todo check user's connection when the app loads */` comment:
 
-```tsx
+```js
 useEffect(() => {
   checkConnection()
   async function checkConnection() {
@@ -345,7 +345,7 @@ useEffect(() => {
 
 For more information on the `useEffect` hook, see the [React documentation](https://react.dev/reference/react/useEffect#useeffect).
 
-### Checking the user's passport score
+### Checking the user's Passport score
 
 This function checks the user's Passport score. This requires that the user has already submitted their passport for scoring. If they have not, they need to do that first. You'll add the necessary function that allows them to submit their passport in the next step.
 
@@ -357,7 +357,7 @@ In this step, you'll do the following:
 
 Find the `todo` comment `/* todo check user's passport */` in `app/pages.tsx`. Replace the comment with the following code:
 
-```tsx
+```js
 async function checkPassport(currentAddress = address) {
   setScore('')
   setNoScoreMessage('')
@@ -405,10 +405,10 @@ The following parameters are required in the API call to submit the passport:
 - Nonce
 ```
 
-Add the following 2 functions to `app/page.tsx` after the `checkPassport` function, replacing the `/* todo get signing message from API */` and ` /* todo submit passport for scoring */` comments:
+Add the following two functions to `app/page.tsx` after the `checkPassport` function, replacing the `/* todo get signing message from API */` and ` /* todo submit passport for scoring */` comments:
 
 
-```tsx
+```js
   async function getSigningMessage() {
     try {
       const response = await fetch(SIGNING_MESSAGE_URI, {
@@ -451,14 +451,14 @@ Add the following 2 functions to `app/page.tsx` after the `checkPassport` functi
   }
 ```
 
-The first function, `getSigningMessage` calls the `signing-message` API endpoint. The response contains the `nonce` and `message` data required for signing. This function is called inside the second funtion, `submitPassport`. The message is passed to the user's wallet to be signed. Once signed, it is added to the body of a POST request to the `submit-passport` API endpoint along with the `signature`, `scorer_id` and `nonce`.
+The first function, `getSigningMessage` calls the `signing-message` API endpoint. The response contains the `nonce` and `message` data required for signing. This function is called inside the second funtion, `submitPassport`. The message is passed to the user's wallet to be signed. Once signed, it is added to the body of a POST request to the `submit-passport` API endpoint along with the `signature`, `scorer_id` and `nonce`. Assuming the API call is successful, the user's Passport is submitted and the `checkpassport` function can be called to retrieve its score.
 
 
 ## Styling
 
-Finally, we'll add some basic styles! (feel free to modify these as you'd like):
+Finally, add some styling to your app! Some basic styling is suggested below, but you are free to unleash your creativity! For more information on CSS styling, see [these instructions](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics).
 
-```tsx
+```js
 const styles = {
   main: {
     width: '900px',
@@ -501,14 +501,18 @@ const styles = {
 
 ## Testing it out
 
-Now we should be able to test out the app!
-
-To do so, open your terminal and run the following command:
+You are now ready to test your app! To do so, open your terminal and run the following command:
 
 ```
 npm run dev
 ```
 
+Your app is now available in your web browser by navigating to `localhost:3000`.
+
 ## 🎉 Congratulations!
 
-You've built your first gated application with Gitcoin Passport!
+You've built your first gated application with Gitcoin Passport! If you used the default styling, your app will look as follows:
+
+![app](/assets/quick-start-app.png)
+
+Use the buttons to connect your wallet and test all the functions you just added!
