@@ -1,6 +1,6 @@
 # Style guide
 
-This style guide lays out the basicstandards for the documentation on this site. This is to encourage standardized syntax, tone, grammar and styling across the site. The aim of the style guide is **not** to stifle individualism, but to empower a diverse set of contributors from across the community by:
+This style guide lays out the basic standards for the documentation on this site. This is to encourage standardized syntax, tone, grammar and styling across the site. The aim of the style guide is **not** to stifle individualism, but to empower a diverse set of contributors from across the community by:
 
 - being clear about the best practises we want to adhere to
 - being clear about the criteria by which pull requests will be evaluated
@@ -119,6 +119,40 @@ You should start proper nouns with capital letters. This includes capitalizing t
 
 ### Styling
 
+#### Headings
+
+Headings are styled using the hash character (#). The number of hashes preceding the title corresponds to the level of the heading. For example, a single hash creates a top level heading. Two hashes is a second-level heading. 
+
+In these docs the page title should be a top level (single hash) heading. All other headings should be minimum of second-level (two hashes). Nesting up to 5 hashes is allowed.
+
+e.g. 
+
+```
+# Main page title
+
+## Section One
+  ...
+### Getting started
+  ...
+#### Some more details
+  ...
+##### Really fine detail 1
+  ...
+##### Really fine detail 2
+  ...
+
+### Moving on
+  ...
+#### Some fine details
+  ...
+## Section 2
+  ...
+### Getting started
+  ...
+#### Details
+  ...
+```
+
 #### Links
 
 Inline links are fine, but it is best if they are not too frequent. A good rule of thumb is to have fewer than 5 inline links per paragraph. More than that can become distracting for the reader.
@@ -151,7 +185,35 @@ Images can be embedded in pages using standard markdown notation:
 You should save the image into the `/assets` folder and use the relative path to it in the link, rather than linking to an external resource. Any images that require aknowledgements must have them included clearly in the image caption or in text immediately beneath the image. Do not add any images that would break copyright.
 
 
-## internationalization
+## Styles for Users
+
+Users are people that are interesting in using Gitcoin passport to demonstrate their identity/credentials. They are not interested in writing code. Users are a very diverse group of people from a range of backgrounds with a variety of experiences and expertise. 
+
+This means we should use language that is accessible as possible and avoid using words that are specific to the software industry. Jargon from web3, software development or any other technical industry are likely to be points of friction for at least some of our Users. 
+
+To be as inclusive as possible, we should **use language that as many people as possible can understand without having to look things up**.
+
+Images and screenshots are helpful because some Users will learn better from visual assets than from text.
+
+## Styles for Developers
+
+Developers want to write code that incorporates Gitcoin Passport into their applications. This means developers like to see examples in the form of code snippets. In our markdown files, code snippets are wrapped in three " ` " characters. The language can be defined in the same line. So, for example:
+
+
+\```js\
+console.log("some javascript code")\
+\```
+
+renders as:
+
+```js
+console.log("some javascript code")
+```
+
+Developers probably also appreciate frequent links to external documentation and API references, and links to Github repositories with full application code.
+
+
+## Internationalization
 
 Right now we are an English-language only site. We would prefer to be available in many languages! If you can help us to internationalize our documentation, get in touch through Github or Discord!
 
