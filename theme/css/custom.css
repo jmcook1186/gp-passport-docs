@@ -269,3 +269,10 @@ kbd {
 .result-no-output {
     font-style: italic;
 }
+
+img[alt="sign-in"] {
+    width: 250px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+}

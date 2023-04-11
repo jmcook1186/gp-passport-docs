@@ -21,7 +21,7 @@ We'll start by creating a new `Scorer`. A `Scorer` is an instance of an algorith
 Give your scorer a name and a short description, then click `Continue`. 
 You will be presented with several options for the type of scorer to create. This is because the Passport stamps can be weighted in different ways depending upon the intended use case. In this example, we want to use the Passport to identify Sybils. For the scorer type, choose __Sybil Prevention__:
 
-![Sybil Prevention Scorer](https://arweave.net/6W8YSh9hkpSje6HhFZVl360nx4iTWMvrarVwHlVQmp4)
+![scorer use case](/assets/scorer-use-case.png)
 
 There are some options for the Sybil prevention model to run in the scorer. 
 
@@ -68,7 +68,7 @@ The app will be built using [Next.js](https://nextjs.org/) and will make use of 
 
 ### API endpoints
 
-The base URl for the API methods we'll be using is `https://api.scorer.gitcoin.co/`. There are several API methods that can be accessed by extending this base URL. You can browse the API details at [https://api.scorer.gitcoin.co/docs](https://api.scorer.gitcoin.co/docs). The methods that return data about a specific passport are all invoked using HTTP GET. The method to submit a passport uses HTTP POST. In either case, some specific header information is required, including the content type (which is always `application/json`) and the Scorer API key.
+The base URL for the API methods we'll be using is `https://api.scorer.gitcoin.co/`. There are several API methods that can be accessed by extending this base URL. You can browse the API details at [https://api.scorer.gitcoin.co/docs](https://api.scorer.gitcoin.co/docs). The methods that return data about a specific passport are all invoked using HTTP GET. The method to submit a passport uses HTTP POST. In either case, some specific header information is required, including the content type (which is always `application/json`) and the Scorer API key.
 
 When sending a request to the Scorer API, the header information will look as follows (with `API_KEY` representing the key you copied and pasted from the Scorer app earlier):
 
@@ -86,7 +86,7 @@ There are 3 main API endpoints you'll use to build this application.
 This endpoint simply returns the Passport score for the address provided in the request.
 
 ```sh
-https://api.scorer.gitcoin.co/registry/score/${SCORER}/${address}
+https://api.scorer.gitcoin.co/registry/score/${SCORER_ID}/${address}
 ```
 
 #### Getting the signing message and nonce
@@ -113,7 +113,7 @@ const response = await fetch(SUBMIT_PASSPORT_URI, {
   headers,
   body: JSON.stringify({
     address,
-    community: SCORERID,
+    scorer_id: SCORER_ID,
     signature,
     nonce
   })
@@ -160,7 +160,7 @@ In this step, you'll do the following:
 
 - Import the ethers.js library to interact with the user's EVM wallet
 - Import the useState and useEffect hooks from React to store local state and run some code after rendering
-- Configure variables for the Gitcoin Passport API Key, Scorer ID, API endpoints, and the point configuration for the app (the thresholdNumber)
+- Configure variables for the Gitcoin Passport API Key, Scorer ID, API endpoints, and a value for the threshold score a passport must have to give access to the hidden message (the `THRESHOLD_NUMBER`)
 - Create a variable to hold the header information that will be sent with the API calls
 
 Start by opening `app/page.tsx` and removing all of the existing code. Then add the following code to `app/page.tsx` and save the file:
@@ -173,14 +173,14 @@ import { ethers } from 'ethers'
 
 // these lines read the API key and scorer ID from your .env.local file
 const APIKEY = process.env.NEXT_PUBLIC_GC_API_KEY
-const SCORERID = process.env.NEXT_PUBLIC_GC_SCORER_ID
+const SCORER_ID = process.env.NEXT_PUBLIC_GC_SCORER_ID
 
 // endpoint for submitting passport
 const SUBMIT_PASSPORT_URI = 'https://api.scorer.gitcoin.co/registry/submit-passport'
 // endpoint for getting the signing message
 const SIGNING_MESSAGE_URI = 'https://api.scorer.gitcoin.co/registry/signing-message'
 // score needed to see hidden message
-const thresholdNumber = 20
+const THRESHOLD_NUMBER = 20
 
 // these lines add the corretc header information to the request
 const headers = APIKEY ? ({
@@ -250,12 +250,12 @@ export default function Passport() {
             <h1>Your passport score is {score} 🎉</h1>
             <div style={styles.hiddenMessageContainer}>
               {
-                Number(score) >= thresholdNumber && (
+                Number(score) >= THRESHOLD_NUMBER && (
                   <h2>Congratulations, you can view this secret message!</h2>
                 )
               }
               {
-                Number(score) < thresholdNumber && (
+                Number(score) < THRESHOLD_NUMBER && (
                   <h2>Sorry, your score is not high enough to view the secret message.</h2>
                 )
               }
@@ -362,7 +362,7 @@ async function checkPassport(currentAddress = address) {
   setScore('')
   setNoScoreMessage('')
   // 
-  const GET_PASSPORT_SCORE_URI = `https://api.scorer.gitcoin.co/registry/score/${SCORERID}/${currentAddress}`
+  const GET_PASSPORT_SCORE_URI = `https://api.scorer.gitcoin.co/registry/score/${SCORER_ID}/${currentAddress}`
   try {
     const response = await fetch(GET_PASSPORT_SCORE_URI, {
       headers
@@ -437,7 +437,7 @@ Add the following two functions to `app/page.tsx` after the `checkPassport` func
         headers,
         body: JSON.stringify({
           address,
-          scorer_id: SCORERID,
+          scorer_id: SCORER_ID,
           signature,
           nonce
         })
