@@ -10,7 +10,7 @@ To follow this tutorial, you'll first need to visit [https://scorer.gitcoin.co/]
 
 First, click `Sign in with Ethereum`. A prompt will appear to connect your wallet. In this guide we will use Metamask, but the principles are the same for all the wallet options. You will have to unlock your wallet and sign a message to access the scorer app.
  
-![sign-in](/assets/sign-in-to-scorer.png)
+![sign-in](/src/assets/sign-in-to-scorer.png)
 
 Clicking "Sign-In" in your wallet gives you access to the scorer app. There are two options available in the scorer app: `Scorer` and `API Keys`. 
 
