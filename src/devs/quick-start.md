@@ -10,18 +10,18 @@ To follow this tutorial, you'll first need to visit [https://scorer.gitcoin.co/]
 
 First, click `Sign in with Ethereum`. A prompt will appear to connect your wallet. In this guide we will use Metamask, but the principles are the same for all the wallet options. You will have to unlock your wallet and sign a message to access the scorer app.
  
-![sign-in](/src/assets/sign-in-to-scorer.png)
+![sign-in](assets/sign-in-to-scorer.png)
 
 Clicking "Sign-In" in your wallet gives you access to the scorer app. There are two options available in the scorer app: `Scorer` and `API Keys`. 
 
 We'll start by creating a new `Scorer`. A `Scorer` is an instance of an algorithm that generates a score from the stamps in a Passport. To get started, click the `+ Scorer` button.
 
-![scorer app](/assets/scorer-page.png)
+![scorer app](assets/scorer-page.png)
 
 Give your scorer a name and a short description, then click `Continue`. 
 You will be presented with several options for the type of scorer to create. This is because the Passport stamps can be weighted in different ways depending upon the intended use case. In this example, we want to use the Passport to identify Sybils. For the scorer type, choose __Sybil Prevention__:
 
-![scorer use case](/assets/scorer-use-case.png)
+![scorer use case](assets/scorer-use-case.png)
 
 There are some options for the Sybil prevention model to run in the scorer. 
 
@@ -40,7 +40,7 @@ Click `Create Scorer`. Your scorer will be added to your dashboard. Note that it
 
 The scorer app has a tab labelled `API Keys`. Open that tab and Click the a `+ API Key` button.
 
-![api-key](/assets/api-key.png)
+![api-key](assets/api-key.png)
 
 You will be prompted to give the API key a name and then click `Create`. 
 
@@ -513,6 +513,6 @@ Your app is now available in your web browser by navigating to `localhost:3000`.
 
 You've built your first gated application with Gitcoin Passport! If you used the default styling, your app will look as follows:
 
-![app](/assets/quick-start-app.png)
+![app](assets/quick-start-app.png)
 
 Use the buttons to connect your wallet and test all the functions you just added!
