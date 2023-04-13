@@ -13,8 +13,8 @@ extra-watch-dirs = []             # directories to watch for triggering builds
 
 [output.html]
 
-default-theme = "ayu"
-preferred-dark-theme = "navy"
+default-theme = "light"
+preferred-dark-theme = "ayu"
 curly-quotes = true
 mathjax-support = false
 copy-fonts = false
