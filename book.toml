@@ -16,6 +16,7 @@ extra-watch-dirs = []             # directories to watch for triggering builds
 default-theme = "light"
 preferred-dark-theme = "ayu"
 curly-quotes = true
+copy-fonts=false
 mathjax-support = false
 copy-js = true
 additional-css = ["theme/css/custom.css"]
