@@ -3,7 +3,7 @@ authors = ["Joseph"]
 language = "en"
 multilingual = false
 src = "src"
-title = "gitcoin-passport"
+title = "Gitcoin Passport"
 
 [build]
 build-dir = "book"                # the directory where the output is placed
@@ -17,16 +17,15 @@ default-theme = "light"
 preferred-dark-theme = "ayu"
 curly-quotes = true
 mathjax-support = false
-copy-fonts = false
 copy-js = true
 additional-css = ["theme/css/custom.css"]
 # additional-js = ["custom.js"]
 no-section-label = false
-# git-repository-url = "https://github.com/rust-lang/mdBook"
+git-repository-url = "https://github.com/jmcook1186/gp-passport-docs"
 git-repository-icon = "fa-github"
-edit-url-template = "https://github.com/rust-lang/mdBook/edit/master/guide/{path}"
+edit-url-template = "https://github.com/jmcook1186/gp-passport-docs"
 site-url = "/passport-docs/"
-cname = "myproject.rs"
+cname = "passport-docs.rs"
 input-404 = "404.md"
 
 [output.html.search]

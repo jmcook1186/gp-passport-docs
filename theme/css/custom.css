@@ -8,7 +8,8 @@
 }
 
 html {
-    font-family: "Open Sans", sans-serif;
+    /* font-family: "Open Sans", sans-serif; */
+    font-family: "Segoe UI", sans-serif;
     color: var(--fg);
     background-color: var(--bg);
     text-size-adjust: none;
@@ -275,4 +276,16 @@ img[alt="sign-in"] {
     margin-top: 2rem;
     margin-bottom: 2rem;
 
+}
+
+img[alt="header-logo"] {
+    width: 35px;
+    height: 35px;
+    position: relative;
+    top: 40px
+}
+
+.menu-title {
+    position: relative;
+    top: -30px;
 }
