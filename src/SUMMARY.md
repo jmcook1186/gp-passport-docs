@@ -9,12 +9,11 @@
     - [How Gitcoin Passport works](users/how-gitcoin-passport-works.md)
     - [When to use Gitcoin Passport](users/when-to-use-gp.md)
 - [Creating a Passport](users/creating-a-passport.md)
-- [Improving your score](users/improving-scores.md)
 - [Collecting stamps](users/collecting-stamps.md)
 - [Connect to apps](users/connecting-to-apps.md)
 
 # Developers
-- [Getting started](devs/getting-started.md)
+- [Quick start](devs/quick-start.md)
 - [Exploring the stack]()
   - [Passport Protocol](devs/passport-protocol.md)
   - [Passport gating](devs/passport-gating.md)
@@ -25,7 +24,6 @@
   - [Scorer](devs/scorer.md)
   - [Writer](devs/writer.md)
   - [Deduplication](devs/deduplication.md)
-- [Quick start](devs/quick-start.md)
 - [Integrating Passport into apps](devs/integrating-passport.md)
 - [Reading a Passport](devs/reading.md)
 - [Passport gating](devs/passport-gating.md)
