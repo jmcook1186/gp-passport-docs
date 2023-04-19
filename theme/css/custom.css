@@ -287,5 +287,10 @@ img[alt="header-logo"] {
 
 .menu-title {
     position: relative;
-    top: -30px;
+    top: -60px;
+}
+
+.left-buttons {
+    position: relative;
+    top: -40px;
 }
