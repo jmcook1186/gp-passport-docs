@@ -271,6 +271,8 @@ kbd {
     font-style: italic;
 }
 
+
+
 img[alt="sign-in"] {
     width: 250px;
     margin-top: 2rem;
@@ -279,18 +281,18 @@ img[alt="sign-in"] {
 }
 
 img[alt="header-logo"] {
+    margin-top: 1rem;
+    margin-bottom: 0rem;
     width: 35px;
     height: 35px;
-    position: relative;
-    top: 40px
 }
 
+/*
 .menu-title {
     position: relative;
-    top: -60px;
+    top: 0px;
 }
 
-.left-buttons {
-    position: relative;
-    top: -40px;
-}
+.left-buttons {}
+
+/*
