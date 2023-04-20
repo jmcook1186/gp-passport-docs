@@ -182,7 +182,7 @@ const SIGNING_MESSAGE_URI = 'https://api.scorer.gitcoin.co/registry/signing-mess
 // score needed to see hidden message
 const THRESHOLD_NUMBER = 20
 
-// these lines add the corretc header information to the request
+// these lines add the correct header information to the request
 const headers = APIKEY ? ({
   'Content-Type': 'application/json',
   'X-API-Key': APIKEY
