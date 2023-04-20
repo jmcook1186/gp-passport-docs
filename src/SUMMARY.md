@@ -16,7 +16,7 @@
 - [Quick start](devs/quick-start.md)
 - [Learning the concepts](devs/concepts.md)
 - [Integrating Passport into apps](devs/integrating-passport.md)
-- [Reading a Passport](devs/reading.md)
+- [Reading Passport stamps](devs/reading-stamps.md)
 - [Using the scoring API](devs/using-scoring-api.md)
 - [Retrieving Passport scores](devs/retrieving-passport-scores.md)
 - [Using the default Scorer](devs/use-default-scorer.md)

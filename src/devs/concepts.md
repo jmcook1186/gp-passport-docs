@@ -1,5 +1,20 @@
 
 
+## Passports
+
+The example below shows the JSON data format for a Gitcoin Passport. This is an example of a Decentralized Identifier (DID), as defined in the [W3c documentation](https://w3c.github.io/did-core/#a-simple-example). Each passport contains a field named `stamps`. This is a array where your stamps are stored. To see what each stamp looks like, scroll down to the [stamps section](#stamps). When you add stamps to your passport, they are pushed into this array. The entire Passport (DID) object is stored on the Ceramic network and associated with your Ethereum address.
+
+```
+{
+	"issuanceDate": null,
+	"expiryDate": null,
+	"stamps": [
+
+	]
+}
+```
+
+
 ## Passport Protocol
 
 When we talk about the "Passport Protocol", we are talking about the infrastructure which enables project owners and developers to gate their project, and for web3 citizens to create their own Passport to build their decentralized identity and access Passport-gated projects.
@@ -14,7 +29,7 @@ Web3 citizens interface with the Passport Protocol through the Passport holder d
 
 ## Passport-Gating
 
-This is a shorthand for noting that a project has integrated the [Passport Protocol](devs/passport-protocol.md) (e.g. Gitcoin Scorer API) for the purpose of screening accounts to keep out bots, bad actors, or simply real people who don't meet a certain threshold of trustworthiness.
+This is a shorthand for noting that a project has integrated the [Passport Protocol](#passport-protocol) (e.g. Gitcoin Scorer API) for the purpose of screening accounts to keep out bots, bad actors, or simply real people who don't meet a certain threshold of trustworthiness.
 
 **Usage:**
 
@@ -22,12 +37,50 @@ This is a shorthand for noting that a project has integrated the [Passport Proto
 - "Some examples of Passport-gated dApps include: Snapshot, Bankless Academy, and Gitcoin Grants."
 - "Because this community is gated with Gitcoin Passport, it is able to ask for pieces of proof of not just identity via services like BrightID, but also reputation via services like POAP."
 
-See the [Quick Start Guide](devs/quick-start.md) to learn how to gate your project.
+See the [Quick Start Guide](quick-start.md) to learn how to gate your project.
 
 ## Stamps 
 
 Stamps are the key identity verification mechanism of Gitcoin Passport. A stamp is a verifiable credential from an identity provider that is collected in a Passport. Stamps are provided by a variety of web2 and web3 identity authenticators including Google, Facebook, BrightID, ENS, and Proof of Humanity. Stamps given out by particular communities are a functionality that is under development. They do not store any personally identifiable information, only the verifiable credential issued by the identity authenticator.
+
 Passport aggregates stamps and assigns each stamp a different weight according to the needs of a particular community. This weight is used to calculate the cost of forgery of an identity, a score which reflects the credibility of a potential participant’s online identity. For example, a community for developers could assign a greater weight to a Github stamp, resulting in higher scores for those who have Github stamps.
+
+The code snippet below shows a single stamp. This particular stamp proves ownership of a Discord account. The stamps array in the Gitcoin passport object contains multiple instances of this data structure representing each different passport stamp. All the stamps conform to this specific format inherited from [https://www.w3.org/2018/credentials/v1](https://www.w3.org/2018/credentials/v1).
+
+```json
+{
+    "provider": "Discord",
+    "credential": {
+        "type": [
+            "VerifiableCredential"
+        ],
+        "proof": {
+            "jws": "eyJhbGciOiJFZERTQSIsImNyaXQiOlsiYjY0Il0sImI2NCI6ZmFsc2V9..Ac4ey_k49EFc-pNUpbJdfVYQxskVKVEPSZ36bak_vvtGf5gIqy1TXyWlbR5tzhFrzjYlFc-GHQKwSvW-0xzdBA",
+            "type": "Ed25519Signature2018",
+            "created": "2023-04-20T12:31:48.468Z",
+            "proofPurpose": "assertionMethod",
+            "verificationMethod": "did:key:zM6khhvGHobLobLYjd1b1MAtnbgRLh4Sdj1bgRLPGAAvbMA1nt2zcRyqmYU5LC#zKKkghvGHLobELLhS4LPGJAvz2cRyqmYU5LC"
+        },
+        "issuer": "did:key:z6MGH1tn2zcRobLEdj1bgJLhS4LPGGAvbMARkghvymqYU5CL",
+        "@context": [
+            "https://www.w3.org/2018/credentials/v1"
+        ],
+        "issuanceDate": "2023-04-20T12:31:48.468Z",
+        "expirationDate": "2023-07-19T12:31:48.468Z",
+        "credentialSubject": {
+            "id": "did:pkh:eip155:1:0x281aa163B9b0927B8B5C68e5A009ddD06a103Eeb",
+            "hash": "v0.0.0:Hl1gllZWqCWj69w9nmsjbaaahK3QtZthAE7/ku/jN7s=",
+            "@context": [
+                {
+                    "hash": "https://schema.org/Text",
+                    "provider": "https://schema.org/Text"
+                }
+            ],
+            "provider": "Discord"
+        }
+    }
+    }
+```
 
 ## Deduplication of Stamps
 
@@ -35,9 +88,9 @@ You may have noticed at this point that the passport itself does not require uni
 
 The choice here is twofold:
 
-- 1) Binding a stamp to a wallet creates recoverability issues. What if you lose access to your wallet? The underlying stamp would be lost with it, and you wouldn't be able to link your identity providers to a new wallet
+- Binding a stamp to a wallet creates recoverability issues. What if you lose access to your wallet? The underlying stamp would be lost with it, and you wouldn't be able to link your identity providers to a new wallet
 
-- 2) We have built Passport to support contextual identity, you may have a passport that you use within one community, and another you use elsewhere. 
+- We have built Passport to support contextual identity, you may have a passport that you use within one community, and another you use elsewhere. 
 
 Because multiple passports may use the same underlying service for generating a stamp we have added the hash field into our stamps. This hash is a unique identifier that is generated for all VCs issues by the Gitcoin IAM, and provides a unique identifier for the underlying account while preserving anonymity.
 
