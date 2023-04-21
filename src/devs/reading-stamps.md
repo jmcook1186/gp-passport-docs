@@ -25,7 +25,7 @@ The response will be in the form of a `CursorPaginatedStampCredentialResponse`, 
 }
 ```
 
-The `credential` field will be populated with the stamps.
+The `credential` field's changes will be populated with the stamps.
 
 **Note** that to be able to retrieve the stamps using this endpoint, the Passport *must already have been submitted* to the registry using the `registry/submit-passport` endpoint, which in turn requires a message returned from the `registry/signing-message` endpoint to be signed by the Passport holder's Ethereum account. This is possible using raw API requests but requires offline message signing. It is more commonly built into the flow of an app using a  package such as `ethers.js`. There are instructions for how to do this in the [Quick Start guide](quick-start.md)
 
@@ -33,7 +33,9 @@ The `credential` field will be populated with the stamps.
 Example request using Curl:
 
 ```
-curl -X GET "https://api.scorer.gitcoin.co/registry/stamps/0x..." -H 'accept: application/json' -H 'X-API-Key: Zs....'
+curl -X GET "https://api.scorer.gitcoin.co/registry/stamps/0x..." \
+ -H 'accept: application/json' \
+ -H 'X-API-Key: Zs....'
 ```
 
 For a Passport with just one stamp (Google account) the following data will be returned:
