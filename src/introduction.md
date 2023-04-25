@@ -8,7 +8,7 @@ How can we build and verify digital reputation without sacrificing user privacy?
 
 The Gitcoin community has built a tool to do just that: Gitcoin Passport, your citizenship pass for the decentralized internet. 
 
-Passport is a **decentralized identifier (DID)**. DIDs allow anyone to own, manage and verify their digital identity without relying on a centralized database.
+Gitcoin Passport is a sybil resistance protocol and identity aggregation dApp built on the Ceramic Network. Users can collect various identity attestations, called "stamps", from web2 and web3 authenticators all in one place.
  
   
 ![passport](assets/passport-hero.png)
