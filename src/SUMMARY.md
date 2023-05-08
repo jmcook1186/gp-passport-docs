@@ -19,6 +19,7 @@
 - [Reading Passport stamps](devs/reading-stamps.md)
 - [Using the scoring API](devs/using-scoring-api.md)
 - [Retrieving Passport scores](devs/retrieving-passport-scores.md)
+- [Integrating a Scorer](devs/integrating-a-scorer.md)
 - [Using the default Scorer](devs/use-default-scorer.md)
 - [Using custom Scorers](devs/custom-scorers.md)
 - [Deduplicating stamps](devs/deduplicating-stamps.md)

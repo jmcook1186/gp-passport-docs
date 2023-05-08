@@ -1,6 +1,8 @@
 # Connecting to apps
 
-Connecting your Passport to an app couldn't be easier. If an application uses Gitcoin passport it will display a "connect" button. Clicking it will open a prompt to connect using an Ethereum wallet. Choose your wallet, sign the message that appears, and the app takes care of everything else. Behind the scenes, the app will send a request to the Gitcoin passport API to retrieve your Passport score. As a user, you will simply see the content available to you based on your passport score.
+Connecting your Passport to an app couldn't be easier. If an application uses Gitcoin passport it will display a "Connect" or "Sign in with Ethereum" button.
+
+Clicking the button will open a prompt to connect using your Ethereum wallet. Choose your wallet, check and sign the message that appears, and the app takes care of everything else. Behind the scenes, the app will send a request to the Gitcoin Passport API to retrieve your Passport score. As a user, you will simply see the content available to you based on your passport score.
 
 See the concept in acton in this introductory video:
 <br></br>

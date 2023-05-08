@@ -58,10 +58,5 @@ To quote the Bankless team, “the stronger you are on Sybil resistance, the str
 
 When communities gate their projects with this defense, and more users create their Passport, they collectively help build the decentralized "Web3 Sybil Defense Flywheel", making Passport faster and more reliable. Together, we can make web3 a more trustworthy space to be in.
 
-## Action steps
-
-- Join this Telegram group if you’re interested in getting help from the Passport team in integrating Passport into your project or community.
-- Read the Passport documentation.
-- Explore courses on Bankless Academy.
 
 *Written with inputs from DidierKrux.eth, Tetranome.eth and OrnΞllaWeb3.eth*
