@@ -563,8 +563,36 @@ Immediately after that div element, we can add the following code which displays
 
 Now, if you run your app locally using npm run dev you will be able to connect your wallet, submit your passport and check whether you pass the trust criteria. If you do, your address will be rendered to the screen. If you check the `Show Stamps` box, all your stamps will be shown in the browser.
 
-![the final app](../assets/trusted-user-app.png)
+![The app up and running](../assets/trusted-user-app.png)
 
+
+### Multiple users
+
+Now we've seen our app work properly for our own wallet, we can check that it works for multiple users. To keep it simple, we will do this by populating our userInfo state variable with some dummy user data. This simulates the situation where multiple users have connected to the app.
+Adding some data to the definition of userInfo as follows:
+
+```tsx
+const [userInfo, setUserInfo] = useState<Array<UserStruct>>([
+  { id: 0, address: '0x3c9840c489bb3b95cbf7a449dba55ab022cf522c', score: 23, stampProviders: [{ id: 0, stamp: 'Github' }, { id: 1, stamp: 'Lens' }] },
+  { id: 1, address: '0x49bbd0c489bb3b95cbf7a44955aa55b022c1fff5', score: 19, stampProviders: [{ id: 0, stamp: 'Github' }, { id: 1, stamp: 'Google' }] },
+  { id: 2, address: '0x5b985cbf40c489b5cbf7ffa449dba55ab022c1fb', score: 15, stampProviders: [{ id: 0, stamp: 'Google' }, { id: 1, stamp: 'Twitter' }] },
+  { id: 3, address: '0x6e9840c41ffb3b95cbf7adba9dba55ab01fff5a4', score: 28, stampProviders: [{ id: 0, stamp: 'Github' }, { id: 1, stamp: 'Lens' }] }])
+```
+Now when the app starts, it will instantiate the userInfo state variable with these dummy users already inside. When we connect, our address will be added to the array. There are two addresses in the userInfo defined in the snippet above that will pass the default trust criteria.
+
+We can do a quick sanity check and run the app and click Check Users - we will see those two addresses listed.
+
+With our current rendering logic, the Show Stamps checkbox will list all the stamps from all the users in one large list - we won't actually be able to tell who has which stamp. To solve this, we can simply add the first few characters of each user address to each stamp so we can map stamps to owners. To do this, replace the final lines (where we define a SimpleGrid element) in the UI code with the following:
+
+```tsx
+<SimpleGrid columns={3} spacing='10px' marginTop={30}>
+  {showTrusted && showStamps && trustedUsers.map(user => user.stampProviders.map(s => <Badge key={s.id} colorScheme='green'>{s.stamp}:{user.address.substring(0, 5)}</Badge>))}
+</SimpleGrid>}
+```
+
+Now, when we follow through our connect -> submit -> check users -> show stamps flow, we will see something like the following:
+
+![the final app](../assets/trusted-user-app-2.png)
 
 ## Summary
 
