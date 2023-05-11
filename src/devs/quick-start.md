@@ -107,7 +107,7 @@ https://api.scorer.gitcoin.co/registry/submit-passport
 
 The full response might look as follows:
 
-```js
+```typescript
 const response = await fetch(SUBMIT_PASSPORT_URI, {
   method: 'POST',
   headers,
@@ -165,7 +165,7 @@ In this step, you'll do the following:
 
 Start by opening `app/page.tsx` and removing all of the existing code. Then add the following code to `app/page.tsx` and save the file:
 
-```js
+```typescript
 // import the necessary packages
 'use client'
 import { useState, useEffect } from 'react'
@@ -213,7 +213,7 @@ In this step, you'll do the following:
 
 Start by, adding the following code immediately below the existing code in `app/page.tsx`:
 
-```js
+```typescript
 export default function Passport() {
   // here we deal with any local state we need to manage
   const [address, setAddress] = useState<string>('')
@@ -282,7 +282,7 @@ export default function Passport() {
 
 Note that only a portion of the intended functions are implemented in this code snippet - there are `todo` statements in the code as placeholders showing where more functions should be added later. The first section of the code is for defining local state variables. This means setting up some values that will exist throughout the lifecycle of the application, rather than being specific to individual functions. For more background on state management, see the [React documentation](https://react.dev/learn/state-a-components-memory). 
 
-```js
+```typescript
   const [address, setAddress] = useState<string>('')
   const [connected, setConnected] = useState<boolean>(false)
   const [score, setScore] = useState<string>('')
@@ -301,7 +301,7 @@ In this step we'll do the following:
 
 Open `app/page.tsx` and find the `todo` comment `/* todo check user's connection when the app loads */`. Replace this comment with the following code:
 
-```js
+```typescript
 async function connect() {
   try {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
@@ -323,7 +323,7 @@ The UI includes a button that allows the user to trigger the app to connect thei
 
 To do this, add the following `useEffect` hook to your code in place of the `/* todo check user's connection when the app loads */` comment:
 
-```js
+```typescript
 useEffect(() => {
   checkConnection()
   async function checkConnection() {
@@ -357,7 +357,7 @@ In this step, you'll do the following:
 
 Find the `todo` comment `/* todo check user's passport */` in `app/pages.tsx`. Replace the comment with the following code:
 
-```js
+```typescript
 async function checkPassport(currentAddress = address) {
   setScore('')
   setNoScoreMessage('')
@@ -408,7 +408,7 @@ The following parameters are required in the API call to submit the passport:
 Add the following two functions to `app/page.tsx` after the `checkPassport` function, replacing the `/* todo get signing message from API */` and ` /* todo submit passport for scoring */` comments:
 
 
-```js
+```typescript
   async function getSigningMessage() {
     try {
       const response = await fetch(SIGNING_MESSAGE_URI, {
@@ -458,7 +458,7 @@ The first function, `getSigningMessage` calls the `signing-message` API endpoint
 
 Finally, add some styling to your app! Some basic styling is suggested below, but you are free to unleash your creativity! For more information on CSS styling, see [these instructions](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics).
 
-```js
+```typescript
 const styles = {
   main: {
     width: '900px',

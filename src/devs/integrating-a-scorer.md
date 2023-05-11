@@ -65,7 +65,7 @@ Save this file as `.env.local`.
 
 Replace the contents of `app/page.tsx` with the following boilerplate code (this includes all the very basic logic to render a page and connect a wallet to the app, but none of the logic required to check a user passport - we will add this step by step in this tutorial):
 
-```tsx
+```typescript
 'use client'
 import { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
@@ -216,7 +216,7 @@ We want to display a user's trust status in the app's UI. Their trust status wil
 The first step is to retrieve their Passport score by calling the /registry/score/${SCORER_ID}/${address} API endpoint. 
 The following function requests a user's Passport score from that endpoint. If no score exists it prints a warning to the console.
 
-```tsx
+```typescript
 async function getPassportScore(currentAddress: string) {
   console.log("in getScore()")
   const GET_PASSPORT_SCORE_URI = `https://api.scorer.gitcoin.co/registry/score/${SCORERID}/${currentAddress}`
@@ -243,7 +243,7 @@ async function getPassportScore(currentAddress: string) {
 
 Next we want to retrieve the user's stamps by calling the /registry/stamps API endpoint. The following function requests a user's Passport stamp data from that endpoint and prints it to the console. If no score exists it prints a warning to the console.
 
-```tsx
+```typescript
 async function getPassportStamps(currentAddress: string) {
   console.log("in getStamps()")
   const stampProviderArray = []
@@ -260,7 +260,7 @@ async function getPassportStamps(currentAddress: string) {
 
 We can invoke the function on the click of a button by adding the following to the UI:
 
-```tsx
+```typescript
 <Button colorScheme='teal' variant='outline' onClick={() => getPassportStamps(address)}>Check Stamps</Button>
 ```
 
@@ -301,7 +301,7 @@ There is a lot of information contained in the object returned from registry/sta
 
 Let's just try to parse out the useful information first. We'll do this in a separate function, so let's replace our console.log() statement with a some simple code that parses out the provider for each of the user's stamps as a string and adds it to an Array. We'll print this array to the console to check we only have the provider strings.
 
-```tsx
+```typescript
 async function getPassportStamps(currentAddress: string) {
   console.log("in getStamps()")
   const stampProviderArray = []
@@ -348,7 +348,8 @@ Now, for our actual app we want to return the array to use elsewhere instead of 
 The two functions, `getPassportScore()` and `getPassportStamps` return data that we want to keep track of in our app so that we can use it to make decisions about the trustworthiness of a user. This means we need a way to track these data in the app's state and functions that access that state to make some calculations.
 
 We can start by wrapping the two functions in an outer `checkpassport()` function that calls both `getPassportScore()` and `getPassportStamps`:
-```tsx
+
+```typescript
 async function checkPassport(currentAddress = address) {
   let score: number = await getPassportScore(currentAddress) as number
   let stampProviders = await getPassportStamps(currentAddress) as Array<string>
@@ -357,7 +358,7 @@ async function checkPassport(currentAddress = address) {
 
 Instead of creating lots of state variables for each user, we can define an interface that can hold all the relevant information we want to track about each user. Add the following interface to the boilerplate code outside of the `Passport()` function:
 
-```tsx
+```typescript
 interface UserStruct {
   id: number;
   address: string;
@@ -367,7 +368,7 @@ interface UserStruct {
 ```
 The `UserStruct` interface has fields for the user's address, score and stamp providers as well as a unique identifier. Notice that we also defined the type of the `stampProviders` field to be an array of `Stamp` - this is a new struct we haven't defined yet. We need instances of `Stamp` to contain the name of each stamp provider with a unique identifier. Add the following interface to the code just above the definition of `UserStruct`:
 
-```tsx
+```typescript
 interface Stamp {
   id: number
   stamp: string
@@ -376,7 +377,7 @@ interface Stamp {
 
 In our `checkPassport()` function, we can pass the responses from `getPassportScore()` and `getPassportStamps()` into a new instance of `UserStruct`. We can then add each instance to a state variable array. First, add a state variable `userInfo` as an array that will take instances of `UserStruct`.
 
-```tsx
+```typescript
 const [userInfo, setUserInfo] = useState<Array<UserStruct>>([])
 ```
 
@@ -386,7 +387,7 @@ Remember, before constructing the `UserStruct` we have to parse the stamp provid
 
 We also want to add a condition to prevent repeatedly adding the same user to the userInfo array, so we can wrap the call to `setUserInfo` in a simple `if` statement to check whether the user already exists.
 
-```tsx
+```typescript
 async function checkPassport(currentAddress = address) {
   let score: number = await getPassportScore(currentAddress) as number
   let stampProviders = await getPassportStamps(currentAddress) as Array<string>
@@ -419,7 +420,7 @@ Let's set some arbitrary requirements. If the user has owns a Lens stamp and and
 
 So far, we have set up a state variable to collect all the connected users. We want a subset of those users that meet our eligibility requirements. We can achieve this by calling `filter` on the `UserInfo` array. We'll filter on our trust criteria by checking the `stampProviders` and `score` fields of each `UserStruct` in `UserInfo` and return the filtered array:
 
-```tsx
+```typescript
 function checkTrustedUsers() {
   return userInfo.filter(user => user.stampProviders.filter(
     provider => provider.stamp.includes('Lens')
@@ -431,13 +432,13 @@ function checkTrustedUsers() {
 
 We can now keep track of this filtered array in our app's state too. Create a new state variable, `TrustedUsers`. It's type should be an array of `UserStructs`.
 
-```tsx
+```typescript
 const [trustedUsers, setTrustedUsers] = useState<Array<UserStruct>>([])
 ```
 
 Now we can update the app's state by passing checkTrustedUsers() to setTrustedUsers(). 
 
-```tsx
+```typescript
 setTrustedUsers(checkTrustedUsers())
 ```
 
@@ -452,13 +453,13 @@ Let's just add a button that will toggle displaying the trusted users on or off.
 We'll create a small function that sets a boolean to control the display that will be part of the app's state.
 Add the new state variable, initialized to `false`:
 
-```tsx
+```typescript
 const [showTrusted, setShowTrusted] = useState<boolean>(false)
 ```
 
 Now add `updateShowTrusted` that resets `Trustedusers` and sets `ShowTrusted` to `true`. This is where we want to call the `setTrustedUsers()` function.
 
-```tsx
+```typescript
 const updateShowTrusted = () => {
   setTrustedUsers(checkTrustedUsers())
   if (showTrusted === false) {
@@ -473,7 +474,7 @@ Now, we want to make sure all this logic is executed as soon as a user connects 
 
 The `connect()` and `checkConnection()` functions should end up as follows:
 
-```tsx
+```typescript
 useEffect(() => {
   checkConnection()
   async function checkConnection() {
@@ -506,7 +507,7 @@ async function connect() {
 
 Now, in our UI, we can add a button that calls this function. This button can replace the `Check Stamps` button we created earlier.
 
-```tsx
+```typescript
 <Button colorScheme='teal' variant='outline' onClick={updateShowTrusted}>Check Users</Button>
 ```
 
@@ -514,7 +515,7 @@ Let's also add a way to show which specific stamps the connected user owns. We m
 
 We can start by defining a function, just like `updateShowTrusted` that acts like a boolean switch, but this time it will toggle displaying the connected user's stamps.
 
-```tsx
+```typescript
 const updateShowStamps = () => {
   if (showStamps === false) {
     setShowStamps(true)
@@ -528,20 +529,20 @@ const updateShowStamps = () => {
 
 And, again, we need to add a new state variable to track the state of this switch:
 
-```tsx
+```typescript
 const [showStamps, setShowStamps] = useState<boolean>(false)
 ```
 
 And add a checkbox to the UI that calls `updateShowStamp` when it is checked:
 
-```tsx
+```typescript
 <Checkbox colorScheme='telegram' onChange={updateShowStamps}>Show stamps</Checkbox>
 ```
 
 The final step is to update the UI code so that the data is actually displayed when the appropriate buttons and checkbox are activated.
 Immediately below the block of UI code wrapped in `Stack` tags, we can add the following `div` element:
 
-```tsx
+```typescript
 <div>
   <br />
   {showTrusted && <h3><b>Trusted users</b></h3>}
@@ -554,7 +555,7 @@ This element contains two conditional rendering statements. They check whether `
 
 Immediately after that div element, we can add the following code which displays the user's stamps if the `Show Stamps` checkbox is activated:
 
-```tsx
+```typescript
 {showStamps &&
   <SimpleGrid columns={4} spacing='10px' marginTop={30}>
     {showTrusted && showStamps && trustedUsers.map(user => user.stampProviders.map(s => <Badge key={s.id} colorScheme='green'>{s.stamp}</Badge>))}
@@ -571,7 +572,7 @@ Now, if you run your app locally using npm run dev you will be able to connect y
 Now we've seen our app work properly for our own wallet, we can check that it works for multiple users. To keep it simple, we will do this by populating our userInfo state variable with some dummy user data. This simulates the situation where multiple users have connected to the app.
 Adding some data to the definition of userInfo as follows:
 
-```tsx
+```typescript
 const [userInfo, setUserInfo] = useState<Array<UserStruct>>([
   { id: 0, address: '0x3c9840c489bb3b95cbf7a449dba55ab022cf522c', score: 23, stampProviders: [{ id: 0, stamp: 'Github' }, { id: 1, stamp: 'Lens' }] },
   { id: 1, address: '0x49bbd0c489bb3b95cbf7a44955aa55b022c1fff5', score: 19, stampProviders: [{ id: 0, stamp: 'Github' }, { id: 1, stamp: 'Google' }] },
@@ -584,7 +585,7 @@ We can do a quick sanity check and run the app and click Check Users - we will s
 
 With our current rendering logic, the Show Stamps checkbox will list all the stamps from all the users in one large list - we won't actually be able to tell who has which stamp. To solve this, we can simply add the first few characters of each user address to each stamp so we can map stamps to owners. To do this, replace the final lines (where we define a SimpleGrid element) in the UI code with the following:
 
-```tsx
+```typescript
 <SimpleGrid columns={3} spacing='10px' marginTop={30}>
   {showTrusted && showStamps && trustedUsers.map(user => user.stampProviders.map(s => <Badge key={s.id} colorScheme='green'>{s.stamp}:{user.address.substring(0, 5)}</Badge>))}
 </SimpleGrid>}
