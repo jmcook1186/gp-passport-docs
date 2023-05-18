@@ -1,47 +1,40 @@
 ## How Gitcoin Passport Works
 
-This page explains how Gitcoin Passport enables you to verify the unique humanity of a wallet who wants to access your app/project.
-Gitcoin Passport is a self-sovereign data collection protocol built with the Ceramic Network, created in line with the Decentralized Identifier (DID) and Verifiable Credential (VC) specifications. 
+Gitcoin Passport is a tool that allows users to present evidence that they are real, unique humans and signal their trustworthiness to apps. It is a way to collect and present data without exposing it or giving up ownership. Under the hood, it is a unique identifier (a DID) associated with your Ethereum address, stored on the Ceramic network. The DID resolves to a DID document, where data is stored. In the document there is a field named "stamps" where a user's stamp data is collected in the form of Verified Credentials.
 
-This data is intended for broad interoperability for any system that wishes to issue or consume VCs to establish the ‘unique humanity’ of an individual through their direct ownership of multiple accounts (Twitter, BrightID), or web3 assets (ENS).
+*Verified Credentials do not contain any personal identifying information! They simply demonstrate, using a cryptographic signature, that the user gave access to a specific app and that some criteria were met.*
 
-The Gitcoin Passport team continually expands what stamps Passport holders can collect. Stamps represent a web3 citizen's participation in various groups and communities.
+Apps can use the Gitcoin Passport API to query the Passport data and make decisions about how to handle certain users. The API can aggregate the data into a "score" or detect ownership of specific stamps.
 
-## How A Passport-Gated Project Validates A User's Identity
+The Gitcoin Passport team continually expands what stamps Passport holders can collect. Stamps represent a user's participation in various groups and communities.
 
-Below is an example of how a project—that has integrated with Gitcoin Passport and requires users to have a particular set of stamps (VCs) to interact with their system—would review a potential user's Passport.
+## How can apps use Passport for access control?
 
-### STEP 1: Load a user's Passport 
+Apps can integrate Gitcoin Passport to control who can access certain content or functions. For example, a website might have a secret section that is only visible to users owning a specific set of stamps, or a voting system might restrict participation to users with a certain Passport score. Here's how this works:
 
-Upon arriving at this app, the user is prompted to connect their Passport. The user signs a message in their wallet that controls their Passport, granting the app access to their public key, and the app can lookup their DID (https://github.com/w3c-ccg/did-pkh).
+### 1: Load a user's Passport 
 
-The app then attempts to fetch the Passport data from Gitcoin Passport's servers and the Ceramic network. 
+When a user loads an app they are immediately prompted to connect sing their Ethereum wallet. The user signs a message in their wallet that controls access to their Passport. If this message is signed, the app is granted access to their public key which can be used to lookup their DID (https://github.com/w3c-ccg/did-pkh) on Ceramic. 
 
-- If no passport is found, continue to ​Step 2
-- If a passport is found, continue to ​Step 3
+- If the DID **is not** associated with a Passport, continue to ​Step 2
+- If the DID **is** not associated with a Passport, continue to ​Step 3
 
 
-### STEP 2: Direct user to create or manage their Passport
+### 2: Direct user to create or manage their Passport
 
-If the user does not have a passport or does not hold enough stamps to meet that app's requirements, the user should be directed to the Gitcoin Passport app at [https://passport.gitcoin.co/](https://passport.gitcoin.co/).
+If the user does not have a Passport or does not hold enough stamps to meet that app's requirements, the user should be directed to the Gitcoin Passport app at [https://passport.gitcoin.co/](https://passport.gitcoin.co/).
 
-Gitcoin's instance of the Passport app has integrated the identity and verification stamps necessary for building their Unique Humanity. The Unique Humanity score (among other scores available soon) incentivizes users to provide multiple stamps as evidence that they are a single user, and in reward are given increasing weight to their matching abilities in the Quadratic Funding mechanism used by Gitcoin Grants.
+Gitcoin's instance of the Passport app has integrated the identity and verification stamps necessary for building their Unique Humanity. The Unique Humanity score increases as the user adds more stamps as evidence that they are a unique human.
 
-Once connected to the Passport application, users sign a message granting the app access to their Ceramic stream. New users will have a blank passport created, and existing users will see their passport data and existing stamps. 
+Explore our [`Creating your Passport`](creating-a-passport.md) and [`Collecting stamps`](collecting-stamps.md) pages for more details.
 
-It is important to note that stamps expire/decay after a certain amount of time. This ensures Passport holders are still providing an accurate representation of themselves. By default, stamps expire after 90 days.
+### 3: Validate and score the user's Passport
 
-They can then continue managing their passport, linking new services and claiming stamps to enrich their verifiable online identity.
-
-### STEP 3: Validate and score the user's Passport
-
-When a passport has been loaded, the app can validate the stamps, calculate a score and decide if the user has the necessary stamps to continue into the system. It is important to note, that the validation step is extremely important, in order to make sure that the stamps have been issued by a trusted provider (in this case Gitcoin). The Verification of the VCs is done by using the API endpoint(s).
-
-The integrating app should adhere to this process to ensure they aren’t being presented passports with invalid VCs, and that VCs were issued by trusted servers. Right now, Gitcoin is the only trusted issuer of these VCs. We expect that change in time but have not yet defined criteria for issuers to be certified.
+Once a Passport has been connected, the app can verify the stamps, calculate a score and decide if the user has the necessary stamps to continue into the system. The verification step is extremely important - it checks that the stamps have been issued by a trusted provider (Gitcoin, by default). The verification of the VCs is done using the Passport API. Right now, Gitcoin is the only trusted issuer of these VCs. We expect to enable a process for becoming a trusted issuer soon.
 
 ### STEP 4: Grant or deny the user access
 
-If the user has the required stamps and/or a high enough score, it's up to you to decide what they get access to.
+The Passport score or list of stamps can be returned from the Passport API and used to execute access control logic in an app. If a user has the required stamps and/or a high enough score, the app can give them access to different content. You can build a simple app for yourself using our [trusted user app tutorial](../devs/integrating-a-scorer.md)
 
 Some examples include: 
 
@@ -49,3 +42,4 @@ Some examples include:
 - Ability to vote on a governance proposal
 - Ability to participate in a grants program
 - Ability to play a game
+

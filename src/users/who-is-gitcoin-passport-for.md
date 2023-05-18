@@ -18,4 +18,4 @@ And while you can just stick to Gitcoin's battle-tested defaults for verifying a
 
 ## Identity Providers
 
-Passport is on its way to becoming the go-to solution for projects to protect their communities, and the identity aggregator internet citizens trust most to access the best and most trustworthy experiences in web3.
+Passport is on its way to becoming the go-to solution for projects to protect their communities, and the identity aggregator internet citizens trust most to access the best and most trustworthy experiences in web3. If participation in your platform can be expressed in the form of a verifiable credential then it can be represented as a Gitcoin Passport stamp, meaning you can start experimenting with composable communities and network effects across web3, while your users benefit from more proof of personhood.
