@@ -669,17 +669,92 @@ if (roundedScore > thresholdNumber) {
 }
 ```
 
-Currently, user scores are onyl retrieved when the user clicks the "get score" button, but really we would like it to be automatic. Delete the `get score` button from the UI. Now, you can invoke the `getScore()` function inside the `submitPassport()` function so that when a user submits their passport, the score is calculated and the values of `score` and `isAboveThreshold` are all updated in the app's state in a single click.
+Currently, user scores are only retrieved when the user clicks the "get score" button, but really we would like it to be automatic. Delete the `get score` button from the UI. Now, you can invoke the `getScore()` function inside the `submitPassport()` function so that when a user submits their passport, the score is calculated and the values of `score` and `isAboveThreshold` are all updated in the app's state in a single click.
 
 Simply add `getScore()` to `submitPassport()` immediately after `console.log('data:', data)` and before the `catch` statement. Since your `submit passport` button is now doing more than just submitting the passport, it might be better to give it a more general name. For consistency with the "Connect Wallet" button, you can update the button text to "Connect Passport".
 
+## Displaying the score
 
-Congratulations!
+Almost there! One final thing - it would be helpful for the user to know their current score so that they know how much to improve it by to get access to the gated content. To do this, you need to render the score from your app's state in the browser. In this example, you will only show the user their score if it is *below* the threshold. This helps the user to determine how much they need to improve their score to access your gated content.
 
-You now have a fully functional application! Your user can enter the app, connect their wallet and Passport. IOf their Passport score is above a threshold, they can see some secret content that shows them how to join a special DAO. If their Passport score is below the threshold they are instructed how to get more stamps.
+First, lets add the `score` as an argument to pass to `TabLayout` and propagate it from there into the `JoinTheDao` component and then from there into the `ContentBelowThreshold` component. Your `TabLayout` in `tab-contents.tsx` should look as follows:
+
+```tsx
+const TabLayout = ({ isAboveThreshold, score }) => {
+    return (
+        <Tabs>
+            <TabList>
+                <Tab>Home</Tab>
+                <Tab>Learn about Web3</Tab>
+                <Tab>Learn about DAOs</Tab>
+                <Tab>Join the DAO</Tab>
+            </TabList>
+
+            <TabPanels>
+                <TabPanel>
+                    <Welcome />
+                </TabPanel>
+                <TabPanel>
+                    <WhatIsWeb3 />
+                </TabPanel>
+                <TabPanel>
+                    <WhatAreDaos />
+                </TabPanel>
+                <TabPanel>
+                    <JoinTheDao isAboveThreshold={isAboveThreshold} score={score} />
+                </TabPanel>
+            </TabPanels>
+        </Tabs>
+    )
+}
+```
+
+Then you need to pass `score` to `JoinTheDao` so that the first line of the `JoinTheDao definition looks as follows:
+
+```tsx
+const JoinTheDao = ({ isAboveThreshold, score }) => {
+    ...
+```
+
+Then update the `ContentBelowThreshold` component so that it takes `score` as an argument. Then you can add some simple Typescript before the return statement that creates a default string that will be used to warn the user that they don't have a Passport yet *if* the value of `score` is equal to its unset value. However, if `score` has had a value set, it warns the user that their score is not high enough, reporting the actual score in the text. Your final `ContentBelowThreshold` component should look as follows:
+
+```tsx
+const ContentBelowThreshold = ({ score }) => {
+    let text: string = 'Your current Passport score is ${score}'
+    if (score == '') {
+        text = "You do not yet have a Passport score. Maybe you haven't created or connected your Passport?"
+    }
+    return (
+        <>
+            <br />
+            <p>😭😭😭</p>
+            <br />
+            <p>We would love you to join our DAO.</p>
+            <br />
+            <p>Unfortunately, you do not quite meet the eligibility criteria.</p>
+            <p> {text} </p>
+            <p>You can go to the <Link href="https://passport.gitcoin.co" color='teal.500' isExternal>Passport App </Link> and add more stamps to your Passport.</p>
+            <p>When you have enough stamps to generate a score above 20, you can come back and join our DAO!</p>
+            <br />
+            <p>In the meantime you can read our <Link href="https://docs.gitcoin.co" color='teal.500' isExternal> awesome documentation </Link> to learn more about Gitcoin passport</p>
+        </>
+    )
+}
+```
+
+Finally, you need to pass the value of `score` to the `TabLayout` component in the UI. Back in `page,tsx`, update `<TabLayout ...>` as follows:
+
+```tsx
+<TabLayout isAboveThreshold={isAboveThreshold} score={score} />
+```
+
+
+
+🎉🎉🎉 Congratulations! 🎉🎉🎉
+
+You now have a fully functional application! Your user can enter the app, connect their wallet and Passport. If their Passport score is above a threshold, they can see some secret content that shows them how to join a special DAO. If their Passport score is below the threshold they are shown their score and instructed to go get more stamps.
 
 Time to test out your app - start the app using `npm run dev` and click to connect your wallet and Passport!
-
 
 ## Summary
 
@@ -694,4 +769,4 @@ This tutorial walked you through building a basioc Passport-gated application. Y
 
 ## Further Reading
 
-For more on Gitcoin Passport, you can keep browsing this website, or you can join the Gitcoin Discord. Having completed this tutorial, a great next step would be to try our "integrating stamps and scorers" tutorial where you can learn how to handle individual stamp data as well as Passport scores.
+For more on Gitcoin Passport, you can keep browsing this website, or you can join the [Gitcoin Discord](https://discord.gg/gitcoin). Having completed this tutorial, a great next step would be to try our "integrating stamps and scorers" tutorial where you can learn how to handle individual stamp data as well as Passport scores.
