@@ -2,7 +2,7 @@
 
 ## Why is deduplication necessary?
 
-Stamp deduplication is a crucial feature that prevents users from setting up more than one Passport and using the same credentials to verify their identity multiple times. Deduplication is critical to ensure each person can only have one instance of each stamp. Deduplication ensures that a user can only tie each stamp to one identity.
+Stamp deduplication is a crucial feature that prevents users from using the same credentials to verify their identity multiple times in a single context. Deduplication is critical to ensure each person can only use one instance of each stamp for a particular purpose. Deduplication ensures that a user can only tie each stamp to one identity.
 
 ## How does Gitcoin Passport handle duplicate stamps?
 
@@ -14,11 +14,13 @@ This means that, in a given scoring instance, if a Passport holder submits a sta
 For example, let’s say you build an application that uses the Gitcoin Passport API to verify the unique humanity of your users. Two Passports, “Passport A” and “Passport B,” present the same stamp based on the same Twitter account. In this scenario, the Last-in-First-out deduplication method would only count the stamp instance that was submitted earliest, ignoring the one that was submitted later.
 
 For example, if Passport A submitted the Twitter stamp first, followed by Passport B, your app would only count the instance of the Twitter stamp submitted by Passport A. The same rule applies to any subsequent instances of the stamp, regardless of the Passport.
+
 This LIFO method ensures that each Passport’s score accurately reflects the unique identity of its holder. This prevents duplicate stamps from skewing the verification process and prevents users from re-using evidence of personhood across multiple Passports.
 
 ## Things to note
 
 If a user creates a Passport with a Twitter stamp, they can also create a separate Passport with a Google stamp, and potentially more with other unique stamps. 
+
 While users cannot create multiple Passports with the same stamps, they can create multiple Passports with unique stamps in each. Stamp deduplication means that users that choose to create multiple Passports will have to spread their stamps across them, preventing those passports from accruing high scores.
 
 Stamps are also unique to scoring instances. For example, one user uses Passport holder A with one Twitter account in an application that uses scoring instance X, and another user uses the same Twitter account in a distinct Passport in an independent scoring instance Y. In this case, both users will get scored for the Twitter account. As long as the scoring instances are independent, there is no concern for double counting or interference between instances.
