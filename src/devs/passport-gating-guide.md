@@ -410,7 +410,7 @@ You can achieve this by adding the following function to your app, next to your 
   }, [])
 ```
 
-Well done - your users cna now connect their Ethereum wallet to your app. If they are already connected, their address will be added to your app's state automatically when the app is started. You can check that this is all working properly by running the app (`npm run dev`) and connecting your wallet.  
+Well done - your users can now connect their Ethereum wallet to your app. If they are already connected, their address will be added to your app's state automatically when the app is started. You can check that this is all working properly by running the app (`npm run dev`) and connecting your wallet.  
 
 
 ## Connecting to Gitcoin Passport
@@ -469,7 +469,7 @@ try {
 }
 ```
 
-These functions contain all the logic required for a user to submit their Passport to the registry. However, this is an action that needs to be triggered by the user. We cna add another button to the UI that executes the Passport submission when it is clicked. Add the following code to the UI, immediately below the `connect` button, inside the `<Flex>` tags:
+These functions contain all the logic required for a user to submit their Passport to the registry. However, this is an action that needs to be triggered by the user. We can add another button to the UI that executes the Passport submission when it is clicked. Add the following code to the UI, immediately below the `connect` button, inside the `<Flex>` tags:
 
 
 ```tsx
@@ -612,7 +612,7 @@ In `page.tsx`, add another state variable below `setScore` as follows:
 const [isAboveThreshold, setIsAboveThreshold] = useState<Boolean>(false)
 ```
 
-Now this state variable exists, you need to pass it to the `JoinTheDao` component. You cna do this by updating the `<TabLayout>` tag in the UI code. The tag can be updated so that it looks as follows:
+Now this state variable exists, you need to pass it to the `JoinTheDao` component. You can do this by updating the `<TabLayout>` tag in the UI code. The tag can be updated so that it looks as follows:
 
 ```tsx
 <TabLayout isAboveThreshold={isAboveThreshold} />
@@ -755,13 +755,13 @@ Time to test out your app - start the app using `npm run dev` and click to conne
 
 ## Summary
 
-This tutorial walked you through building a basioc Passport-gated application. You used Nextjs to create a simple educational page about Web3 and DAOs, with a special section that invited users to join a secret Passport DAO - but only if their Passport score is above your threshold! By following this tutorial you learned:
+This tutorial walked you through building a basic Passport-gated application. You used Nextjs to create a simple educational page about Web3 and DAOs, with a special section that invited users to join a secret Passport DAO - but only if their Passport score is above your threshold! By following this tutorial you learned:
 
 - how to create a Scorer instance and a Passport API key
 - how to use instantiate a `provider` and call its API
 - how to connect a user's Ethereum wallet to your application and store their address in your app's state
 - how to submit a Passport to the Gitcoin Passport registry using the Passport API
-- How to retrieve a user's Pasport score using the Passport API
+- How to retrieve a user's Passport score using the Passport API
 - How to use the score to conditionally render some content ("passport gating")
 
 ## Further Reading
