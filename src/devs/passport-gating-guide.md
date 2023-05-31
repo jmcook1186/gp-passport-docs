@@ -1,4 +1,4 @@
-# Integrating a Scorer (tutorial)
+# Gating access using a Passport score
 
 In this guide, you'll learn how to gate an application using Gitcoin passport. Specifically, you will:
 
@@ -6,11 +6,9 @@ In this guide, you'll learn how to gate an application using Gitcoin passport. S
 - Learn how to fetch a score using the Gitcoin Passport API
 - Examine best practises for retrieving Passport scores
 - Implement gating so that some content is only available to users with scores above a threshold
-- Learn how to redirect users to instructions for improving their Passport scores
+- Redirect users to instructions for improving their Passport scores
 
-You'll be using [Next.js](https://nextjs.org/) with [Chakra-UI](https://chakra-ui.com/) for styling and the [Gitcoin Passport Scorer API](https://api.scorer.gitcoin.co/docs#/) to do this. The API enables everything you need to easily build Sybil resistance into your web or mobile application.
-
-To follow this tutorial, you'll need Nextjs, Node and Chakra-UI installed on your machine.
+You'll be using [Next.js](https://nextjs.org/) with [Chakra-UI](https://chakra-ui.com/) for styling and the [Gitcoin Passport Scorer API](https://api.scorer.gitcoin.co/docs#/). To follow this tutorial, you'll need Nextjs, Node and Chakra-UI installed on your machine.
 
 
 ## Creating a Scorer
@@ -18,7 +16,6 @@ To follow this tutorial, you'll need Nextjs, Node and Chakra-UI installed on you
 There is **no universal public endpoint** for retreiving a Passport score. Instead, each application is required to create its own instance of a Scorer and an API key. The application then makes requests to that Scorer instance, which in turn calculates passport scores using the Gitcoin server and returns the result. This means you need to create a scorer and an API key before you start building an app that uses the Gitcoin Passport API.
 
 To create your Scorer, go to [scorer.gitcoin.co](scorer.gitcoin.co).
-
 
 Click `Sign in with Ethereum`. A prompt will appear to connect your wallet. In this guide we will use Metamask, but the principles are the same for all the wallet options. You will have to unlock your wallet and sign a message to access the scorer app.
  
@@ -68,14 +65,14 @@ You'll need both the Scorer ID and the API Key to complete the rest of the steps
 
 ## Application outline
 
-Now that you have a `Scorer` and an API Key, you can move on to building your app. The app we will build will be an educational site where users cna learn about web3 and DAOs, and then if - and only if - their Passport score is above a threshoild, they can uncover the secret information required to join our (pretend) Passport DAO.
+Now that you have a `Scorer` and an API Key, you can move on to building your app. The app we will build will be an educational site where users can learn about web3 and DAOs, and then if - and only if - their Passport score is above a threshold, they can uncover the secret information required to join our (pretend) Passport DAO.
 
 The app will work as follows:
 
-- When the user visits the sample app, they will be asked to connect their wallet
-- Once they've connected, we'll automatically fetch their passport score from the Gitcoin Scorer API
-- There will be three tabs that the user can see. Two are available to everyone - they provide general information about web3 and DAOs.
-- If their score meets a threshold, the third tab will contain instructions and links that will enable them to join the DAO.
+- When the user visits the sample app, they have access to three tabs - one to welcome them and two containing learning material about Web3 and DAOs.
+- A fourth tab will contain information about how the user can join your DAO.
+- The user will connect their wallet and Gitcoin Passport to the app. Their score will be calculated automatically.
+- If their score meets a threshold, the fourth tab will contain instructions and links that will enable them to join the DAO.
 - If the score does not meet the threshold, we'll withold the instructions and instead the tab will contain instructions for increasing their Passport score.
 
 This simple example demonstrates the principles you would use to gate a real application using Gitcoin passport.
@@ -83,7 +80,7 @@ This simple example demonstrates the principles you would use to gate a real app
 The app will be built using [Next.js](https://nextjs.org/) and will make use of several of the Scorer API methods.
 
 
-### API endpoints
+## API endpoints
 
 The base URL for the API methods we'll be using is `https://api.scorer.gitcoin.co/`. There are several API methods that can be accessed by extending this base URL. You can browse the API details at [https://api.scorer.gitcoin.co/docs](https://api.scorer.gitcoin.co/docs). The methods that return data about a specific passport are all invoked using HTTP GET. The method to submit a passport uses HTTP POST. In either case, some specific header information is required, including the content type (which is always `application/json`) and the Scorer API key.
 
@@ -98,7 +95,7 @@ When sending a request to the Scorer API, the header information will look as fo
 
 There are 3 main API endpoints you'll use to build this application.
 
-#### Getting the score for an address
+### Getting the score for an address
 
 This endpoint simply returns the Passport score for the address provided in the request.
 
@@ -106,7 +103,7 @@ This endpoint simply returns the Passport score for the address provided in the 
 https://api.scorer.gitcoin.co/registry/score/${SCORER_ID}/${address}
 ```
 
-#### Getting the signing message and nonce
+### Getting the signing message and nonce
 
 Users are required to sign a message in order to connect their Passport to the app. This endpoint is used to generate the appropriate message for them to sign.
 
@@ -114,7 +111,7 @@ Users are required to sign a message in order to connect their Passport to the a
 https://api.scorer.gitcoin.co/registry/signing-message
 ```
 
-#### Submitting the passport
+### Submitting the passport
 
 Once the user has signed the message, we'll send a new request to this endpoint along with the address, Scorer ID, signature, and nonce.
 
@@ -122,24 +119,9 @@ Once the user has signed the message, we'll send a new request to this endpoint 
 https://api.scorer.gitcoin.co/registry/submit-passport
 ```
 
-The full response might look as follows:
-
-```typescript
-const response = await fetch(SUBMIT_PASSPORT_URI, {
-  method: 'POST',
-  headers,
-  body: JSON.stringify({
-    address,
-    scorer_id: SCORER_ID,
-    signature,
-    nonce
-  })
-})
-```
-
 ## Setting up the app
 
-We'll create an app using Nextjs. We can bootstrap using create-next-app. This automatically creates all the necessary subdirectories, configuration and boilerplate code required to get us building as quickly as possible.
+We'll create an app using [Nextjs](https://nextjs.org/). We can bootstrap using `create-next-app`. This automatically creates all the necessary subdirectories, configuration and boilerplate code required to get us building as quickly as possible.
 
 Start by entering the following command into your terminal:
 
@@ -181,8 +163,8 @@ NEXT_PUBLIC_GC_SCORER_ID=<your-scorer-id>
 Save this file as `.env.local`.
 
 
-
 ## Building the App
+
 ### Getting started
 Now that the app is set up, you can begin building. The code that controls what is rendered in the browser is contained in `src/app/page.tsx`. When you created your project, `create-next-app` saved a version of `page.tsx` with some default code. You can delete all the code in `page.tsx` and replace it with this boilerplate:
 
@@ -242,7 +224,7 @@ export default function Passport() {
 }
 ```
 
-Notice that you are importing components from three sources: `ethers`, `@chakra-ui/react` and a local file `'../../tab-contents'`. The local file does not exist yet so you'll need to create it. Create a file called `tab-contents.tsx` in `src/app`. This is where you define the layout of four tabs on your web page and write the content that each tab should contain. You can paste the following code into your `tab-contents.tsx` and save the file.
+Notice that you are importing components from three sources: `ethers`, `@chakra-ui/react` and a local file `'tab-contents'`. The local file does not exist yet so you'll need to create it. Create a file called `tab-contents.tsx` in `src/app`. This is where you define the layout of four tabs on your web page and write the content that each tab should contain. You can paste the following code into your `tab-contents.tsx` and save the file.
 
 ```tsx
 //tab-contents.tsx
@@ -368,7 +350,7 @@ This creates a variable `address` and a function `setAddress` you can use to upd
 
 Next, you can create a function, `connect`, that will ask a user to open their wallet and allow the app to connect. In this context, "connecting" means that the app can see the user's address, account balance, and suggest transactions to approve.
 
-The way Metamask enables connections to Ethereum is by injecting a `provider` into the website. The `provider` exposes an [API](https://docs.metamask.io/guide/ethereum-provider.html) with methods for relaying information to and from Ethereum. The default behaviour is for Metamask to route requests made using the `provider` API to Ethereum through its RPC service, Infura, although you can configure it to use any Ethereum node exposing an RPC port. To connect a wallet to an app, you need to detect the 'provider' and get the user's accounts.
+The way Metamask enables connections to Ethereum is by injecting a `provider` into the website. The `provider` exposes an [API](https://docs.metamask.io/guide/ethereum-provider.html) with methods for relaying information to and from Ethereum. The default behaviour is for Metamask to route requests made using the `provider` API to Ethereum through its RPC service, Infura, although you can configure it to use any Ethereum node exposing an RPC port (consider using your own node!). To connect a wallet to an app, you need to detect the `provider` and get the user's accounts.
 
 The `provider` is injected at `window.ethereum`. API requests can be sent to this provider by calling the `request` method on the `provider` and passing the API method you want to use. This is an asynchronous action, so you need to `await` the result. The following single line of code detects the `provider` and requests the user accounts using the [`eth_requestAccounts`](https://docs.metamask.io/guide/rpc-api.html#restricted-methods) method, saving them to the variable `accounts`:
 
@@ -376,7 +358,7 @@ The `provider` is injected at `window.ethereum`. API requests can be sent to thi
 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
 ```
 
-This is all that is required to connect a wallet to the app, because a lot f compelxity is abstracted away behind the `provider` API call. To turn this into a `connect()` function suitable for your app, you can wrap the `provider` API call in `try/catch` so you can handle any errors. You also want to pull the returned data into your app's state. The API method returns the address in an `array`. You can pull the address out of the array as a `string` by specifying `accounts[0]` and then pass it to the `setAddress` function you defined earlier. Ad the following function to `page.tsx` immediately below your state variable (`const [address, setAddress]`...) definition.
+This is all that is required to connect a wallet to the app, because a lot of compelxity is abstracted away behind the `provider` API call. To turn this into a `connect()` function suitable for your app, you can wrap the `provider` API call in `try/catch` so you can handle any errors. You also want to pull the returned data into your app's state. The API method returns the address in an `array`. You can pull the address out of the array as a `string` by specifying `accounts[0]` and then pass it to the `setAddress` function you defined earlier. Ad the following function to `page.tsx` immediately below your state variable (`const [address, setAddress]`...) definition.
 
 ```tsx
   async function connect() {
@@ -544,6 +526,16 @@ Clicking this button, after connecting a wallet and submitting a Passport to the
 ```sh
 PASSPORT SCORE = 26.57
 ```
+
+### Notes on best practise for scoring
+
+It is recommended to use the Gitcoin Passport default scorer. For now, this is the only option for server-side score calculations, but you can choose whether you wish the server to return an integer value (0-100) or return a Boolean (0 or 1). This is selected when you create the instance of the Scorer at [scorer-gitcoin.co](scorer.gitcoin.co).
+
+If you choose to return an integer value, you can make your own choice about what threshold score to use to gate your content. In this tutorial, you are receiving an integer value from the Scorer API and thresholding it in the app. The threshold is hardcoded into the app with a value of 20. This is thought to be a pretty good general purpose threshold, but you can choose to raise the threshold if you want to be more stringent, or lower it to be more lenient. 
+
+Picking the right threshold is application-specific and might require some experimentation to get it just right. If you choose to return a binary value, the Gitcoin server will still calculatye the Passport score using the exact same algorithm, but it will threshold it server-side and return a 0 if the user's score is below the built-in threshold, or a 1 if the user's score exceeds the threshold.
+
+You can also choose to calculate your own Passport score by retrieving raw stamp data and applying some custom algorithm on them. This provides a lot of flexibility to app builders. However, the major reason server-side calculation is recommended is because stamp deduplication is included in the score calculation. This means the Gitcoin server ensures that each specific user stamp can only be counted *once* by your Scorer instance. If you implemenmt your own scoring algorithm, you need to account for stamp deduplication yourself.
 
 ## Gating access using the score
 
@@ -749,12 +741,17 @@ Finally, you need to pass the value of `score` to the `TabLayout` component in t
 ```
 
 
-
 🎉🎉🎉 Congratulations! 🎉🎉🎉
 
 You now have a fully functional application! Your user can enter the app, connect their wallet and Passport. If their Passport score is above a threshold, they can see some secret content that shows them how to join a special DAO. If their Passport score is below the threshold they are shown their score and instructed to go get more stamps.
 
 Time to test out your app - start the app using `npm run dev` and click to connect your wallet and Passport!
+
+
+![the app's success mode](../assets/app-success.png)
+
+![the app's failure mode](../assets/app-failure.png)
+
 
 ## Summary
 
